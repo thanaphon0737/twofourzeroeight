@@ -14,7 +14,7 @@ namespace twozerofoureight
     {
         Model model;
         Controller controller;
-       
+        private bool initial = true;
         public TwoZeroFourEightView()
         {
             InitializeComponent();
@@ -27,7 +27,20 @@ namespace twozerofoureight
 
         public void Notify(Model m)
         {
-            UpdateBoard(((TwoZeroFourEightModel) m).GetBoard());
+            if (initial)
+            {
+                lblScore.Text = "0";
+                initial = false;
+            }else
+            {
+                UpdateBoard(((TwoZeroFourEightModel) m).GetBoard());
+                lblScore.Text = ((TwoZeroFourEightModel)m).showScore().ToString();
+                if (((TwoZeroFourEightModel)m).isFull() && !((TwoZeroFourEightModel)m).ispossibleMove())
+                {
+                    MessageBox.Show("GAME OVER\n Your Score :" + ((TwoZeroFourEightModel)m).showScore());
+                }
+            }
+            
         }
 
         private void UpdateTile(Label l, int i)
@@ -95,6 +108,33 @@ namespace twozerofoureight
         private void btnDown_Click(object sender, EventArgs e)
         {
             controller.ActionPerformed(TwoZeroFourEightController.DOWN);
+        }
+        private void btnX_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Left)
+            {
+                btnLeft.Focus();
+                btnLeft.PerformClick();
+                e.IsInputKey = true;
+            }
+            else if (e.KeyCode == Keys.Right)
+            {
+                btnRight.Focus();
+                btnRight.PerformClick();
+                e.IsInputKey = true;
+            }
+            else if (e.KeyCode == Keys.Down)
+            {
+                btnDown.Focus();
+                btnDown.PerformClick();
+                e.IsInputKey = true;
+            }
+            else if (e.KeyCode == Keys.Up)
+            {
+                btnUp.Focus();
+                btnUp.PerformClick();
+                e.IsInputKey = true;
+            }
         }
 
     }

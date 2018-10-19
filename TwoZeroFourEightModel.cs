@@ -39,7 +39,7 @@ namespace twozerofoureight
 
         private int[,] Random(int[,] input)
         {
-            while (true)
+            while (!isFull())
             {
                 int x = rand.Next(boardSize);
                 int y = rand.Next(boardSize);
@@ -259,6 +259,44 @@ namespace twozerofoureight
             }
             board = Random(board);
             NotifyAll();
+        }
+        public int showScore()
+        {
+            int score = 0;
+            foreach(int element in board)
+            {
+                score += element;
+            }
+            return score;
+        }
+        public bool isFull()
+        {
+            int count = 0;
+            foreach(int element in board)
+            {
+                if (element > 0) count++;
+            }
+            return count == 16;
+        }
+        public bool ispossibleMove()
+        {
+            int count = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    if (board[i, j] == board[i + 1, j]) count++;
+                }
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (board[i, j] == board[i, j + 1]) count++;
+                }
+            }
+            if (count == 0) return false;
+            return true;
         }
     }
 }
